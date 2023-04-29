@@ -40,12 +40,12 @@ class Db:
             cursor.execute(sql_queries.PRODUCTS_BY_USER, (user_id,))
             for product_id, category, title, description, price, available_date, quantity, photos, \
                     is_promotional, catalog_name in cursor:
-                product = Product(product_id, category, title, description, price, available_date, quantity, photos,
-                                  is_promotional)
-                all_products[product_id] = product
+                # Note: due to the way grouping works, same product can appear again if it's in different catalog
+                if product_id not in all_products:
+                    product = Product(product_id, category, title, description, price, available_date, quantity,
+                                      photos, is_promotional)
+                    all_products[product_id] = product
                 if catalog_name is not None:
-                    # Note: same product existing in different catalogs will get two different instances of Product()
-                    # this can be addressed by various means
                     catalogs.setdefault(catalog_name, []).append(product_id)
                 else:
                     products_not_in_catalog.append(product_id)

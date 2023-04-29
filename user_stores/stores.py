@@ -1,6 +1,6 @@
 import operator
 
-''' Basic data structures for holding the data '''
+''' Basic structures for holding the data '''
 
 
 class Product:
@@ -83,7 +83,7 @@ class User:
 
         # Just an example, if there are many filters and sorting conditions, can call a mapping to
         # multiple filter functions or other fancy design
-        unfiltered_products = (self.all_products[product] for product in microstore.products)
+        unfiltered_products = (self.all_products[product_id] for product_id in microstore.products)
         return self._apply_filters(unfiltered_products, oldest_amount, newest_amount, category_filter, is_in_stock)
 
 
@@ -97,8 +97,10 @@ class User:
         # multiple filter functions or other fancy design
 
         # here we will drop catalog -> product mappings, as there are no requirements and this is just an example
-        unfiltered_products = (self.all_products[product] for catalog in storefront.catalogs.values()
-                               for product in catalog)
+        # also same product id can be referenced in multiple catalogs so let's make the list unique
+        product_ids = set(product_id for catalog in storefront.catalogs.values()
+                                     for product_id in catalog)
+        unfiltered_products = (self.all_products[product_id] for product_id in product_ids)
         return self._apply_filters(unfiltered_products, oldest_amount, newest_amount, category_filter, is_in_stock)
 
 
