@@ -1,12 +1,8 @@
--- TODO check product in multiple catalogs
-
 -- product categories
 CREATE TABLE IF NOT EXISTS product_categories (
     category_id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL
 );
-
-CREATE INDEX product_categories_category_id_idx on product_categories(category_id);
 
 
 -- unique products
